@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Tables{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Tables</h2>
+    <a href="{% url 'table_create' %}" class="btn btn-danger">+ Add Table</a>
+</div>
+<div class="row g-3">
+    {% for table in tables %}
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <div class="fs-4 fw-bold">Table {{ table.number }}</div>
+            <div class="text-muted">Seats {{ table.capacity }}</div>
+            <div class="table-status-{{ table.status }} mt-2">{{ table.get_status_display }}</div>
+            <a href="{% url 'table_update' table.pk %}" class="btn btn-outline-secondary btn-sm mt-2">Edit</a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No tables added yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

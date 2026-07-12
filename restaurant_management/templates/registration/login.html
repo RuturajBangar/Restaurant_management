@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Staff Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card p-4 mt-5">
+            <h3 class="mb-3 text-center">Staff Login</h3>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-danger w-100">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

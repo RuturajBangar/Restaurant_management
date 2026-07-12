@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="text-muted small">Tables</div>
+            <div class="fs-3 fw-bold">{{ occupied_tables }} / {{ total_tables }}</div>
+            <div class="text-muted small">occupied</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="text-muted small">Active Orders</div>
+            <div class="fs-3 fw-bold">{{ active_orders }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="text-muted small">Today's Reservations</div>
+            <div class="fs-3 fw-bold">{{ todays_reservations|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="text-muted small">Today's Revenue (paid orders)</div>
+            <div class="fs-3 fw-bold">${{ todays_revenue|floatformat:2 }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5>Recent Orders</h5>
+            <table class="table table-sm">
+                <thead><tr><th>#</th><th>Table</th><th>Status</th><th>Total</th></tr></thead>
+                <tbody>
+                {% for order in recent_orders %}
+                    <tr>
+                        <td><a href="{% url 'order_detail' order.pk %}">#{{ order.pk }}</a></td>
+                        <td>{{ order.table }}</td>
+                        <td><span class="badge badge-status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+                        <td>${{ order.total|floatformat:2 }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" class="text-muted">No orders yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'order_create' %}" class="btn btn-danger btn-sm">+ New Order</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5>Today's Reservations</h5>
+            <table class="table table-sm">
+                <thead><tr><th>Time</th><th>Customer</th><th>Table</th><th>Guests</th></tr></thead>
+                <tbody>
+                {% for r in todays_reservations %}
+                    <tr>
+                        <td>{{ r.time }}</td>
+                        <td>{{ r.customer.name }}</td>
+                        <td>{{ r.table }}</td>
+                        <td>{{ r.guests }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" class="text-muted">No reservations today.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'reservation_create' %}" class="btn btn-danger btn-sm">+ New Reservation</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
